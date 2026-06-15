@@ -1,8 +1,23 @@
 require('dotenv').config();
 
+const express = require('express');
+const app = express();
+
 const { Client, GatewayIntentBits } = require('discord.js');
 const Groq = require('groq-sdk');
 
+const PORT = process.env.PORT || 3000;
+
+/* 🌐 PORTA PER RENDER (OBBLIGATORIA PER WEB SERVICE) */
+app.get('/', (req, res) => {
+  res.send('Nyxar Bot è online 🤖');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server attivo sulla porta ${PORT}`);
+});
+
+/* 🤖 DISCORD BOT */
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -26,7 +41,6 @@ client.once('ready', () => {
 client.on('messageCreate', async (message) => {
 
   if (message.author.bot) return;
-
   if (!message.content.startsWith('!ai ')) return;
 
   const domanda = message.content.slice(4);
@@ -56,4 +70,5 @@ client.on('messageCreate', async (message) => {
 
 });
 
+/* ⚠️ FIX IMPORTANTE */
 client.login(process.env.TOKEN);
